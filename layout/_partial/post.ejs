@@ -29,32 +29,62 @@
       </a>
     </div>
   <% } %>
-  <% if (showTitle) { %>
-    <%
-    let pinTitle = false;
-    if (showPin && !post.headimg) {
-      pinTitle = true;
-    }
-    %>
-    <h2 class="article-title" <%- pinTitle ? 'pin' : '' %>>
-      <a href="<%- url_for(post.link || post.path) %>">
-        <%- (post.title || post.seo_title) ? (post.title || post.seo_title) : date(post.date, theme.article.body.meta_library.date.format) %>
-      </a>
-    </h2>
-  <% } %>
-  <div class='md'>
-    <% if (post.excerpt) { %>
-      <%- post.excerpt %>
-    <% } else if (post.description) { %>
-      <p><%- post.description %></p>
-    <% } else if (post.content) { %>
-      <% if (theme.article.preview.auto_excerpt) { %>
-        <%- truncate(strip_html(post.content), {length: 200}) %>
-      <% } else { %>
-        <%- post.content %>
-      <% } %>
+  <div class="entry list">
+    <% if (post.thumbnail) { %>
+      <div class='entry_thumb'>
+        <a href="<%- url_for(post.link || post.path) %>">
+          <img src='<%- post.thumbnail %>'/>
+        </a>
+      </div>
     <% } %>
+
+    <div class='entry_content'>
+      <% if (showTitle) { %>
+        <%
+        let pinTitle = false;
+        if (showPin && !post.headimg) {
+          pinTitle = true;
+        }
+        %>
+        <h3 class="post_title" <%- pinTitle ? 'pin' : '' %>>
+          <a href="<%- url_for(post.link || post.path) %>">
+            <%- (post.title || post.seo_title) ? (post.title || post.seo_title) : date(post.date, theme.article.body.meta_library.date.format) %>
+          </a>
+        </h3>
+      <% } %>
+
+      <div class='post_content'>
+        <% if (post.excerpt) { %>
+          <%- post.excerpt %>
+        <% } else if (post.description) { %>
+          <p><%- post.description %></p>
+        <% } else if (post.content) { %>
+          <% if (theme.article.preview.auto_excerpt) { %>
+            <%- truncate(strip_html(post.content), {length: 140}) %>
+          <% } else { %>
+            <%- post.content %>
+          <% } %>
+        <% } %>
+      </div>
+
+      <% if (false) { %>
+      <div class='meta-v3 post_meta' line_style='<%- theme.article.preview.line_style %>'>
+        <div>
+          <time><%= date(post.date, config.date_format) %></time>
+          <% if (post.categories && post.categories.length > 0) { %>
+            <span class="dot"></span>
+            <%- list_categories(post.categories, {
+                show_count: false,
+                separator: '<span class="sep"></span>',
+                style: 'none'
+                }) %>
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+    </div>
   </div>
+
   <% if (showCat || showReadmore || theme.article.preview.author) { %>
     <div class='meta-v3' line_style='<%- theme.article.preview.line_style %>'>
       <div>
