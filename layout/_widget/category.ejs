@@ -4,7 +4,24 @@
     <%- partial('header', {item: item}) %>
     <div class='content'>
       <ul class="entry navigation">
-        <% site.categories.sort('path').each(function(category){ %>
+        <% 
+          var categories = [];
+          site.categories.each(function(category) {
+            categories.push(category);
+          });
+
+          if (site.data.categories && site.data.categories.sort) {
+            var sort_names = site.data.categories.sort;
+            categories.sort(function(a, b) {
+              return sort_names.indexOf(a.name) - sort_names.indexOf(b.name);
+            });
+          } else {
+            categories.sort(function(a, b) {
+              return a.path.localeCompare(b.path);
+            });
+          }
+        %>
+        <% categories.forEach(function(category){ %>
           <li><a class="flat-box<%= category.parent ? ' child' : ''%>"
             title="<%- url_for(category.path) %>" href="<%- url_for(category.path) %>"
             active-action="<%= url_for(category.path).replace(/\/|%|\./g, "")?url_for(category.path).replace(/\/|%|\./g, ""):"home" %>"
