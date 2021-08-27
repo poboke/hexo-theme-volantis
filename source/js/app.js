@@ -179,6 +179,8 @@ const VolantisApp = (() => {
     // 决定一二级导航栏的切换 【向上滚动50px切换为一级导航栏；向下滚动50px切换为二级导航栏】  【移动端 PC】
     let pos = document.body.scrollTop;
     volantis.dom.$(document).scroll(Debounce(() => {
+      //不隐藏导航栏
+      return;
       const scrollTop = fn.getScrollTop();
       const del = scrollTop - pos;
       if (del >= 50 && scrollTop > 100) { // 向下滚动50px
